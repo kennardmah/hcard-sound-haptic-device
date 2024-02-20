@@ -1,15 +1,14 @@
 void setup() {
-  // write code
+  // Start serial communication at 9600 bps.
   Serial.begin(9600);
 }
 
 void loop() {
-  // write code
   if (Serial.available() > 0) {
-    // Read the incoming data as a string
-    String data = Serial.readStringUntil('\n');
-    // Debug print the received string
-    Serial.print("Received: ");
-    Serial.println(data);
+    // Read the incoming byte:
+    String incomingData = Serial.readStringUntil('\n');
+    
+    // For debugging, print the incoming data to the Serial Monitor:
+    Serial.print("I received: ");
+    Serial.println(incomingData);
   }
-}

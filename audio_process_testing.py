@@ -1,7 +1,7 @@
 import pyaudio
 import numpy as np
-# import time
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Define the audio stream parameters
 FORMAT = pyaudio.paInt16  # Audio format (16-bit PCM)
@@ -23,6 +23,17 @@ def find_blackhole_device_index(pyaudio_instance):
         if dev_info['name'].startswith('BlackHole') and dev_info['maxInputChannels'] >= CHANNELS:
             return i
     return None
+
+def plot_stereo_sound(stereo_audio_list):
+    left = [item[0] for item in stereo_audio_list]
+    right = [item[1] for item in stereo_audio_list]
+    plt.plot(range(len(left)), left, label='Left Ear')
+    plt.plot(range(len(left)), right, label='Right Ear')
+    plt.title('Linear Graph of Left and Right Amplitude')
+    plt.xlabel('Index')
+    plt.ylabel('Amplitude')
+    plt.legend()
+    plt.show()
 
 blackhole_index = find_blackhole_device_index(p)
 
@@ -61,7 +72,7 @@ try:
 except KeyboardInterrupt:
     # Stop and close the stream
     print("Stopping audio stream...")
-    print(testing)
+    plot_stereo_sound(testing)
     stream.stop_stream()
     stream.close()
     # Terminate PyAudio

@@ -47,7 +47,7 @@ try:
         # Convert data to numpy array for analysis, reshaped for CHANNELS
         audio_data = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)
         # Calculate RMS for each channel
-        print(f"AudioData: {audio_data}")
+        # print(f"AudioData: {audio_data}")
         intensity = rms(audio_data)
         print(f"Intensity: {intensity}")
         time.sleep(1)  # Capture once per second

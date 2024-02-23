@@ -3,8 +3,9 @@ import time
 
 # Initialize serial port connection
 # Replace 'COM_PORT' with your Arduino's actual COM port
-arduino = serial.Serial('COM_PORT', 9600, timeout=1)
-time.sleep(2)  # Wait for the connection to establish
+COM_PORT = '/dev/cu.usbmodem144401'
+arduino = serial.Serial(COM_PORT, 9600, timeout=1)
+time.sleep(2)
 
 def send_data_to_arduino(data):
     arduino.write(f"{data}\n".encode())
@@ -19,7 +20,6 @@ def process_audio_and_send():
 try:
     while True:
         process_audio_and_send()
-        time.sleep(1)  # Pause for a moment
 except KeyboardInterrupt:
     print("Program terminated")
 finally:

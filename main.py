@@ -1,13 +1,16 @@
+# ====================================================================
+#             ♬♪♫♪♬  Audio Setup - Initial Imports  ♬♪♫♪♬
+# ====================================================================
+
 import pyaudio
 import numpy as np
 import serial
 import time
 
-# CALCULATE AUDIO SOUND AMPLITUDE
-def amplitude(samples):
-    return np.max(np.abs(samples), axis=0)
+# ====================================================================
+#      ♬♪♫♪♬  Real-Time Processing - Audio Data Processing ♬♪♫♪♬
+# ====================================================================
 
-# REAL-TIME WINDOW SMOOTHING
 class RealTimeSmooth:
  
     def __init__(self, window_size):
@@ -23,11 +26,20 @@ class RealTimeSmooth:
             return np.mean(self.data[:self.index], axis=0)
         else:
             return np.mean(self.data, axis=0)
-        
-# class MovingMax:
-#     def __init__(self)
 
-# FIND BLACKHOLE INDEX
+# CALCULATE AUDIO SOUND AMPLITUDE
+def amplitude(samples):
+    return np.max(np.abs(samples), axis=0)
+
+# SCALE AUDIO TO BECOME VIBRATION VALUES
+def scale_audio_intensity(intensity):
+    # write function to scale the intensity for analog write / PWM
+    print('nothing here so far')
+
+# ====================================================================
+#         ♬♪♫♪♬  Device Detection - Find Audio Output  ♬♪♫♪♬
+# ====================================================================
+    
 def find_blackhole_device_index(pyaudio_instance):
     for i in range(pyaudio_instance.get_device_count()):
         dev_info = pyaudio_instance.get_device_info_by_index(i)
@@ -35,7 +47,14 @@ def find_blackhole_device_index(pyaudio_instance):
             return i
     return None
 
+# we can add one for JackAudio
+
+# ====================================================================
+#    ♬♪♫♪♬  Arduino Communication - Convert and Send Signals  ♬♪♫♪♬
+# ====================================================================
+
 def convert_for_arduino(smoothed_intensity):
+    # update later
     if smoothed_intensity > 10:
         return 1
     return 0
@@ -43,31 +62,37 @@ def convert_for_arduino(smoothed_intensity):
 # INITIALIZE PYAUDIO
 p = pyaudio.PyAudio()
 
-# DEFINE PARAMETERS FOR AUDIO STREAM
+# ====================================================================
+#     ♬♪♫♪♬  Stream Configuration - Define Audio Parameters  ♬♪♫♪♬
+# ====================================================================
+
 FORMAT = pyaudio.paInt16  # Audio format (16-bit PCM)
 CHANNELS = 2  # Number of audio channels for stereo sound
 RATE = 44100  # Sample rate (samples per second)
 CHUNK = 1024  # Number of frames per buffer
 
-# SERIAL CONNECTION
+# SERIAL CONNECTION SET-UP
 COM_PORT = '/dev/cu.usbmodem141401'
 arduino = serial.Serial(COM_PORT, 9600)
-time.sleep(2)  # Wait for the connection to establish
+time.sleep(2) # slight delay for connection
 
 blackhole_index = find_blackhole_device_index(p)
 
 if blackhole_index is None:
-    print("BlackHole device with sufficient channels not found.")
+    print("No device with sufficient channels not found.")
     p.terminate()
     exit()
 
-# OPEN STREAM
 stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
                 input=True,
-                input_device_index=blackhole_index,  # Use BlackHole device index
+                input_device_index=blackhole_index,
                 frames_per_buffer=CHUNK)
+
+# ====================================================================
+#      ♬♪♫♪♬  Audio Stream - Capture and Process Audio  ♬♪♫♪♬
+# ====================================================================
 
 print("Starting audio stream...")
 smooth = RealTimeSmooth(window_size=5*int(RATE/CHUNK))
@@ -78,7 +103,6 @@ try:
         audio_data = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)
         intensity = amplitude(audio_data)
         smoothed_intensity = smooth.add_data(intensity)
-
         # convert smoothed_intensity to [0, 1]
         int1 = convert_for_arduino(smoothed_intensity[0])
         int2 = convert_for_arduino(smoothed_intensity[1])
@@ -92,13 +116,11 @@ try:
         else:
             send_int = f"{int(3)}\n"
         
-        # send_int = f"{int(smoothed_intensity[0])}\n"
-        print(smoothed_intensity)
-        # send_int2 = f"{int(smoothed_intensity[1])}\n"
-        arduino.write(send_int.encode())
+        print(intensity)
+        # arduino.write(send_int.encode())
 except KeyboardInterrupt:
     print("Stopping audio stream...")
     stream.stop_stream()
     stream.close()
     p.terminate()
-    arduino.close()  # Close the serial connection
+    # arduino.close()

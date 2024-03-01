@@ -6,26 +6,29 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    // Read the incoming integer:
-    int incomingInt = Serial.parseInt();
-    
-    // Debug to check if received
-    if (incomingInt == 0){
-      digitalWrite(10, LOW);
-      digitalWrite(11, LOW);
-    }
-    else if (incomingInt == 1){
-      digitalWrite(10, LOW);
-      digitalWrite(11, HIGH);
-    }
-    else if (incomingInt == 2){
-      digitalWrite(10, HIGH);
-      digitalWrite(11, LOW);
-    }
-    else{
-      digitalWrite(11, HIGH);
-      digitalWrite(10, HIGH);
-    }
+  if (Serial.available() >= 2) {
+    uint8_t arr[2];
+    Serial.readBytes((char*)arr, 2);
+//    int incomingInt = Serial.parseInt();
+    digitalWrite(10, (arr[0]>30));
+    digitalWrite(11, (arr[1]>30));
+//    // Debug to check if received
+//    if (arr[0]> 30){
+//      digitalWrite(10, LOW);
+//      digitalWrite(11, LOW);
+//    }
+//    else if (incomingInt == 1){
+//      digitalWrite(10, LOW);
+//      digitalWrite(11, HIGH);
+//    }
+//    else if (incomingInt == 2){
+//      digitalWrite(10, HIGH);
+//      digitalWrite(11, LOW);
+//    }
+//    else{
+//      digitalWrite(11, HIGH);
+//      digitalWrite(10, HIGH);
+//    }
+//    
   }
 }

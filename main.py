@@ -107,20 +107,29 @@ try:
         int1 = convert_for_arduino(smoothed_intensity[0])
         int2 = convert_for_arduino(smoothed_intensity[1])
         smoothed_intensity = [int1, int2]
-        if smoothed_intensity == [0, 0]:
-            send_int = f"{int(0)}\n"
-        elif smoothed_intensity == [0, 1]:
-            send_int = f"{int(1)}\n"
-        elif smoothed_intensity == [1, 0]:
-            send_int = f"{int(2)}\n"
-        else:
-            send_int = f"{int(3)}\n"
+
+
+
+        cmdArrayFloat = np.array(intensity, dtype=np.uint8)# array of 2 uint8
+        cmd_bytes = cmdArrayFloat.tobytes()# array of 16 bytes
+        n = arduino.write(cmd_bytes)# send the command
+        print(f"{n} bytes sent")
+
+
+        # if smoothed_intensity == [0, 0]:
+        #     send_int = f"{int(0)}\n"
+        # elif smoothed_intensity == [0, 1]:
+        #     send_int = f"{int(1)}\n"
+        # elif smoothed_intensity == [1, 0]:
+        #     send_int = f"{int(2)}\n"
+        # else:
+        #     send_int = f"{int(3)}\n"
         
-        print(intensity)
+        print(smoothed_intensity)
         # arduino.write(send_int.encode())
 except KeyboardInterrupt:
     print("Stopping audio stream...")
     stream.stop_stream()
     stream.close()
     p.terminate()
-    # arduino.close()
+    arduino.close()

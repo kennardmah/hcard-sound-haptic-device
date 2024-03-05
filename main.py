@@ -72,7 +72,7 @@ RATE = 44100  # Sample rate (samples per second)
 CHUNK = 1024  # Number of frames per buffer
 
 # SERIAL CONNECTION SET-UP
-COM_PORT = '/dev/cu.usbmodem141401'
+COM_PORT = '/dev/cu.usbmodem14101'
 arduino = serial.Serial(COM_PORT, 9600)
 time.sleep(2) # slight delay for connection
 
@@ -95,26 +95,22 @@ stream = p.open(format=FORMAT,
 # ====================================================================
 
 print("Starting audio stream...")
-smooth = RealTimeSmooth(window_size=5*int(RATE/CHUNK))
+smooth = RealTimeSmooth(window_size=int(RATE/CHUNK))
 
 try:
     while True:
         data = stream.read(CHUNK, exception_on_overflow=False)
         audio_data = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)
         intensity = amplitude(audio_data)
-        smoothed_intensity = smooth.add_data(intensity)
+        intensity = smooth.add_data(intensity)
         # convert smoothed_intensity to [0, 1]
-        int1 = convert_for_arduino(smoothed_intensity[0])
-        int2 = convert_for_arduino(smoothed_intensity[1])
-        smoothed_intensity = [int1, int2]
-
-
-
-        cmdArrayFloat = np.array(intensity, dtype=np.uint8)# array of 2 uint8
+        data_normalized = np.array((intensity) / 30000 * 255, dtype = int)
+        cmdArrayFloat = np.array(data_normalized, dtype=np.uint8)# array of 2 uint8
+        print(data_normalized)
         cmd_bytes = cmdArrayFloat.tobytes()# array of 16 bytes
+        # print(cmd_bytes)
         n = arduino.write(cmd_bytes)# send the command
-        print(f"{n} bytes sent")
-
+        # print(f"{n} bytes sent")
 
         # if smoothed_intensity == [0, 0]:
         #     send_int = f"{int(0)}\n"
@@ -125,7 +121,7 @@ try:
         # else:
         #     send_int = f"{int(3)}\n"
         
-        print(smoothed_intensity)
+        # print(smoothed_intensity)
         # arduino.write(send_int.encode())
 except KeyboardInterrupt:
     print("Stopping audio stream...")

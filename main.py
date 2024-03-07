@@ -6,6 +6,7 @@ import pyaudio
 import numpy as np
 import serial
 import time
+import matplotlib.pyplot as plt
 
 # ====================================================================
 #      ♬♪♫♪♬  Real-Time Processing - Audio Data Processing ♬♪♫♪♬
@@ -73,7 +74,7 @@ CHUNK = 1024  # Number of frames per buffer
 
 # SERIAL CONNECTION SET-UP
 COM_PORT = '/dev/cu.usbmodem14101'
-arduino = serial.Serial(COM_PORT, 9600)
+# arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
 time.sleep(2) # slight delay for connection
 
 blackhole_index = find_blackhole_device_index(p)
@@ -91,41 +92,50 @@ stream = p.open(format=FORMAT,
                 frames_per_buffer=CHUNK)
 
 # ====================================================================
+#      ♬♪♫♪♬  Audio Plotting - Finding the Range  ♬♪♫♪♬
+# ====================================================================
+
+def plot_stereo_sound(stereo_audio_list, rate=44100, chunk=1024):
+    left = [item[0] for item in stereo_audio_list]
+    right = [item[1] for item in stereo_audio_list]
+    indices_per_second = rate/chunk
+    time = np.arange(len(stereo_audio_list)) / indices_per_second
+    plt.plot(time, left, label='Left Ear')
+    plt.plot(time, right, label='Right Ear')
+    plt.title('Linear Graph of Left and Right Amplitude')
+    plt.xlabel('Time (seconds)')
+    plt.ylabel('Amplitude')
+    plt.legend()
+    plt.show()
+
+# ====================================================================
 #      ♬♪♫♪♬  Audio Stream - Capture and Process Audio  ♬♪♫♪♬
 # ====================================================================
 
 print("Starting audio stream...")
 smooth = RealTimeSmooth(window_size=int(RATE/CHUNK))
+testing = []
 
 try:
     while True:
         data = stream.read(CHUNK, exception_on_overflow=False)
         audio_data = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)
+
+        # defining and converting intensity into 0, 128, 256
         intensity = amplitude(audio_data)
         intensity = smooth.add_data(intensity)
-        # convert smoothed_intensity to [0, 1]
-        data_normalized = np.array((intensity) / 30000 * 255, dtype = int)
-        cmdArrayFloat = np.array(data_normalized, dtype=np.uint8)# array of 2 uint8
+        data_normalized = [0 if value < 1200 else 128 if value < 2400 else 256 for value in intensity]
+        cmdArrayFloat = np.array(data_normalized, dtype=np.uint8) # array of 2 uint8
         print(data_normalized)
-        cmd_bytes = cmdArrayFloat.tobytes()# array of 16 bytes
+        cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
+        testing.append([data_normalized[0], data_normalized[1]])  # Storing data for plotting
         # print(cmd_bytes)
-        n = arduino.write(cmd_bytes)# send the command
+        # n = arduino.write(cmd_bytes)# send the command # COMMENT OUT W/O ARDUINO
         # print(f"{n} bytes sent")
-
-        # if smoothed_intensity == [0, 0]:
-        #     send_int = f"{int(0)}\n"
-        # elif smoothed_intensity == [0, 1]:
-        #     send_int = f"{int(1)}\n"
-        # elif smoothed_intensity == [1, 0]:
-        #     send_int = f"{int(2)}\n"
-        # else:
-        #     send_int = f"{int(3)}\n"
-        
-        # print(smoothed_intensity)
-        # arduino.write(send_int.encode())
 except KeyboardInterrupt:
     print("Stopping audio stream...")
     stream.stop_stream()
     stream.close()
     p.terminate()
-    arduino.close()
+    plot_stereo_sound(testing, RATE, CHUNK)  # Plotting after stopping the stream with a keyboard interrupt
+    # arduino.close()

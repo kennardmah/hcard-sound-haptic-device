@@ -1,6 +1,3 @@
-pip install jack-client
-pip install pyaudio
-
 # ====================================================================
 #             ♬♪♫♪♬  Audio Setup - Initial Imports  ♬♪♫♪♬
 # ====================================================================
@@ -43,6 +40,7 @@ def scale_audio_intensity(intensity):
 # ====================================================================
 
 client = jack.Client("HCARD_AudioProcessor")
+in_port = client.inports.register("PyAudio_Input")
 
 # ====================================================================
 #     ♬♪♫♪♬  Stream Configuration - Define Audio Parameters  ♬♪♫♪♬

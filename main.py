@@ -124,7 +124,7 @@ try:
         # defining and converting intensity into 0, 128, 256
         intensity = amplitude(audio_data)
         intensity = smooth.add_data(intensity)
-        data_normalized = [0 if value < 1200 else 128 if value < 2400 else 256 for value in intensity]
+        data_normalized = [0 if value < 1200 else 128 if value < 2400 else 255 for value in intensity]
         cmdArrayFloat = np.array(data_normalized, dtype=np.uint8) # array of 2 uint8
         print(data_normalized)
         cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes

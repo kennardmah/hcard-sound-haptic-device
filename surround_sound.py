@@ -68,8 +68,8 @@ RATE = 44100  # Sample rate (samples per second)
 CHUNK = 1024  # Number of frames per buffer
 
 # SERIAL CONNECTION SET-UP
-COM_PORT = '/dev/cu.usbmodem144301'
-# arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
+COM_PORT = '/dev/cu.usbmodem144401'
+arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
 time.sleep(2) # slight delay for connection
 
 blackhole_index = find_blackhole_device_index(p)
@@ -119,13 +119,13 @@ try:
         # defining and converting intensity into 0, 128, 256
         intensity = amplitude(audio_data)
         intensity = smooth.add_data(intensity)
-        data_normalized = [0 if value < 800 else 128 if value < 2000 else 255 for value in intensity]
+        data_normalized = [0 if value < 6000 else 50 if value < 8000 else 100 for value in intensity]
         cmdArrayFloat = np.array(data_normalized, dtype=np.uint8) # array of 2 uint8
         print(intensity)
         cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
-        testing.append(data_normalized)  # Convert np.array to list for easier handling later
+        testing.append(intensity)  # Convert np.array to list for easier handling later
         # print(cmd_bytes)
-        # n = arduino.write(cmd_bytes)# send the command # COMMENT OUT W/O ARDUINO
+        n = arduino.write(cmd_bytes)# send the command # COMMENT OUT W/O ARDUINO
         # print(f"{n} bytes sent")
 except KeyboardInterrupt:
     print("Stopping audio stream...")

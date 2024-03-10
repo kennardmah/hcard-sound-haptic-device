@@ -8,11 +8,11 @@ int BackLeft_5 = 10;
 void setup() {
   // put your setup code here, to run once:
   // Start serial communication at 9600 bps.
-  pinMode(3, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(10, OUTPUT);  
-  pinMode(11, OUTPUT);  
+  pinMode(BackRight_1, OUTPUT);
+  pinMode(FrontRight_2, OUTPUT);
+  pinMode(Front_3, OUTPUT);
+  pinMode(FrontLeft_4, OUTPUT);
+  pinMode(BackLeft_5, OUTPUT);    
 }
 
 void loop() {
@@ -22,61 +22,62 @@ void loop() {
   // Control output in range 0 - 255
   if (buttonState == HIGH) {
     // Turn motors on:
-    // analogWrite(3,0);
-    // analogWrite(5,0);
-    // analogWrite(6,100);
-    // analogWrite(10,0);
-    // analogWrite(11,0);
-    // delay(5000);
+    analogWrite(BackRight_1,0);
+    analogWrite(FrontRight_2,0);
+    analogWrite(Front_3,0);
+    analogWrite(FrontLeft_4,0);
+    analogWrite(BackLeft_5,100);
+    delay(5000);
 
     // Loop through each motor
-    analogWrite(11,100);
-    delay(1000);
-    analogWrite(11,0);
-    analogWrite(3,100);
-    delay(1000);
-    analogWrite(3,0);
-    analogWrite(5,100);
-    delay(1000);
-    analogWrite(5,0);
-    analogWrite(6,100);
-    delay(1000);
-    analogWrite(6,0);
-    analogWrite(10,100);
-    delay(1000);
-    analogWrite(10,0);
+    // analogWrite(BackRight_1,100);
+    // delay(2000);
+    // analogWrite(BackRight_1,0);
+    // analogWrite(FrontRight_2,100);
+    // delay(2000);
+    // analogWrite(FrontRight_2,0);
+    // analogWrite(Front_3,100);
+    // delay(2000);
+    // analogWrite(Front_3,0);
+    // analogWrite(FrontLeft_4,100);
+    // delay(2000);
+    // analogWrite(FrontLeft_4,0);
+    // analogWrite(BackLeft_5,100);
+    // delay(2000);
+    // analogWrite(BackLeft_5,0);
 
-    // analogWrite(3,25);
-    // analogWrite(5,25);
-    // analogWrite(6,25);
+    // Alternate between front and back motors
+    // analogWrite(FrontRight_2,25);
+    // analogWrite(Front_3,25);
+    // analogWrite(FrontLeft_4,25);
     // delay(2000);
-    // analogWrite(3,0);
-    // analogWrite(5,0);
-    // analogWrite(6,0);
-    // analogWrite(10,25);
-    // analogWrite(11,25);
+    // analogWrite(FrontRight_2,0);
+    // analogWrite(Front_3,0);
+    // analogWrite(FrontLeft_4,0);
+    // analogWrite(BackLeft_5,25);
+    // analogWrite(BackRight_1,25);
     // delay(2000);
-    // analogWrite(10,0);
-    // analogWrite(11,0);
-    // analogWrite(3,25);
-    // analogWrite(5,25);
-    // analogWrite(6,25);
+    // analogWrite(BackLeft_5,0);
+    // analogWrite(BackRight_1,0);
+    // analogWrite(FrontRight_2,25);
+    // analogWrite(Front_3,25);
+    // analogWrite(FrontLeft_4,25);
     // delay(2000);
-    // analogWrite(3,0);
-    // analogWrite(5,0);
-    // analogWrite(6,0);
-    // analogWrite(10,25);
-    // analogWrite(11,25);
+    // analogWrite(FrontRight_2,0);
+    // analogWrite(Front_3,0);
+    // analogWrite(FrontLeft_4,0);
+    // analogWrite(BackLeft_5,25);
+    // analogWrite(BackRight_1,25);
     // delay(2000);
-    // analogWrite(10,0);
-    // analogWrite(11,0);
+    // analogWrite(BackLeft_5,0);
+    // analogWrite(BackRight_1,0);
 
   } else {
     // Turn motors off:
-    analogWrite(3,0);
-    analogWrite(5,0);
-    analogWrite(6,0);
-    analogWrite(10,0);
-    analogWrite(11,0);
+    analogWrite(BackRight_1,0);
+    analogWrite(FrontRight_2,0);
+    analogWrite(Front_3,0);
+    analogWrite(FrontLeft_4,0);
+    analogWrite(BackLeft_5,0);
   }
 }

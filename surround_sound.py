@@ -121,7 +121,7 @@ try:
         intensity = smooth.add_data(intensity)
         data_normalized = [0 if value < 800 else 128 if value < 2000 else 255 for value in intensity]
         cmdArrayFloat = np.array(data_normalized, dtype=np.uint8) # array of 2 uint8
-        print(data_normalized)
+        print(intensity)
         cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
         testing.append(data_normalized)  # Convert np.array to list for easier handling later
         # print(cmd_bytes)

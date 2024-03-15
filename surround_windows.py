@@ -65,12 +65,11 @@ p = pyaudio.PyAudio()
 FORMAT = pyaudio.paInt16  # Audio format (16-bit PCM)
 CHANNELS = 6  # Number of audio channels for stereo sound
 RATE = 44100  # Sample rate (samples per second)
-# RATE = 96000  # Sample rate (samples per second)
 CHUNK = 1024  # Number of frames per buffer
 
 # SERIAL CONNECTION SET-UP
 COM_PORT = '/dev/cu.usbmodem144401'
-# arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
+arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
 time.sleep(2) # slight delay for connection
 
 # blackhole_index = find_blackhole_device_index(p)
@@ -128,12 +127,11 @@ try:
         cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
         testing.append(intensity)  # Convert np.array to list for easier handling later
         # print(cmd_bytes)
-        # n = arduino.write(cmd_bytes)# send the command # COMMENT OUT W/O ARDUINO
-        # print(f"{n} bytes sent")
+        n = arduino.write(cmd_bytes) # send the command # COMMENT OUT W/O ARDUINO
 except KeyboardInterrupt:
     print("Stopping audio stream...")
     stream.stop_stream()
     stream.close()
     p.terminate()
     plot_surround_sound(testing)  # Plotting after stopping the stream with a keyboard interrupt
-    # arduino.close()
+    arduino.close()

@@ -116,13 +116,15 @@ try:
     while True:
         data = stream.read(CHUNK, exception_on_overflow=False)
         audio_data = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)
-
         # defining and converting intensity into 0, 128, 256
         intensity = amplitude(audio_data)
         intensity = smooth.add_data(intensity)
-        data_normalized = [0 if value < 6000 else 50 if value < 8000 else 100 for value in intensity]
-        cmdArrayFloat = np.array(data_normalized, dtype=np.uint8) # array of 2 uint8
-        print(intensity)
+        for i, value in enumerate(intensity):
+            if i == 0 or i == 1 or i == 2:
+                intensity[i] = 0 if value < 2000 else 50 if value < 8000 else 100
+            else:
+                intensity[i] = 0 if value < 1000 else 50 if value < 2000 else 100
+        cmdArrayFloat = np.array(intensity, dtype=np.uint8) # array of 2 uint8
         cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
         testing.append(intensity)  # Convert np.array to list for easier handling later
         # print(cmd_bytes)

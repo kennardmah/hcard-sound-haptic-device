@@ -4,27 +4,23 @@ The HCARD Sound Haptic Device project aims to innovate in the field of assistive
 
 ## About The Project
 
-![Device Concept](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/flyer_render.png?raw=true "Device Concept"
+![Device Concept](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/flyer_render.png?raw=true "Device Concept")
 
 This project is a part of the "Human-centred Design of Assistive and Rehabilitation Devices" initiative. It involves creating a device capable of translating sound into haptic feedback, thereby opening new avenues for sensory experience for those with hearing challenges.
-
-## DEMO Day Pics 💡🤖
-
-![Demo Day](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/demo1.JPG?raw=true "Team Pic"
-![Demo Day](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/demo2.JPG?raw=true "Demo in Action"
-![Demo Day](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/demo3.JPG?raw=true "Selfie"
-
 
 ### Features
 
 - **Audio Processing**: Advanced algorithms to capture and process sound in real-time.
 - **Haptic Feedback**: Innovative haptic response system to convey sound information.
 - **User-Centric Design**: Designed with user feedback at every stage to ensure usability and comfort.
-
-### Prerequisites
-
 - Arduino IDE
 - Python 3.x
+
+## DEMO Day Pics 💡🤖
+
+![Demo Day](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/demo1.JPG?raw=true "Team Pic")
+![Demo Day](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/demo2.JPG?raw=true "Demo in Action")
+![Demo Day](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/demo3.JPG?raw=true "Selfie")
 
 ### Contact
 Project Link: https://github.com/kennardmah/hcard-sound-haptic-device
@@ -32,8 +28,8 @@ Project Link: https://github.com/kennardmah/hcard-sound-haptic-device
 ##### This project was an interdepartment collaboration, with the following contributions:
 
 - Byron Chan (MEng Bio-Engineering)
+- Megan Le (MSc Human Robotics)
 - Kennard Mah (MEng Design Engineering)
 - Matthew Wong (MSc Human Robotics)
-- Megan Le (MSc Human Robotics)
 
 Any contribution is welcome!

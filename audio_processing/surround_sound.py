@@ -121,7 +121,7 @@ try:
         intensity = smooth.add_data(intensity)
         for i, value in enumerate(intensity):
             if i == 0 or i == 1 or i == 2:
-                intensity[i] = 0 if value < 1000 else 50 if value < 2000 else 100
+                intensity[i] = 0 if value < 1000 else 50 if value < 000 else 100
             else:
                 intensity[i] = 0 if value < 500 else 50 if value < 1500 else 100
         # data_normalized = [0 if value < 6000 else 50 if value < 8000 else 100 for value in intensity]

@@ -32,10 +32,7 @@ class RealTimeSmooth:
 def amplitude(samples):
     return np.max(np.abs(samples), axis=0)
 
-# SCALE AUDIO TO BECOME VIBRATION VALUES
-def scale_audio_intensity(intensity):
-    # write function to scale the intensity for analog write / PWM
-    print('nothing here so far')
+
 
 # ====================================================================
 #         ♬♪♫♪♬  Device Detection - Find Audio Output  ♬♪♫♪♬
@@ -68,13 +65,13 @@ p = pyaudio.PyAudio()
 # ====================================================================
 
 FORMAT = pyaudio.paInt16  # Audio format (16-bit PCM)
-CHANNELS = 2  # Number of audio channels for stereo sound
+CHANNELS = 5  # Number of audio channels for stereo sound
 RATE = 44100  # Sample rate (samples per second)
 CHUNK = 1024  # Number of frames per buffer
 
 # SERIAL CONNECTION SET-UP
-COM_PORT = '/dev/cu.usbmodem14101'
-# arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
+COM_PORT = '/dev/cu.usbmodem144301'
+arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
 time.sleep(2) # slight delay for connection
 
 blackhole_index = find_blackhole_device_index(p)
@@ -88,7 +85,7 @@ stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
                 input=True,
-                input_device_index=blackhole_index,
+                # input_device_index=blackhole_index,
                 frames_per_buffer=CHUNK)
 
 # ====================================================================
@@ -124,13 +121,13 @@ try:
         # defining and converting intensity into 0, 128, 256
         intensity = amplitude(audio_data)
         intensity = smooth.add_data(intensity)
-        data_normalized = [0 if value < 1200 else 128 if value < 2400 else 255 for value in intensity]
+        data_normalized = [0 if value < 800 else 128 if value < 2000 else 255 for value in intensity]
         cmdArrayFloat = np.array(data_normalized, dtype=np.uint8) # array of 2 uint8
-        print(data_normalized)
+        # print(data_normalized)
         cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
         testing.append([data_normalized[0], data_normalized[1]])  # Storing data for plotting
         # print(cmd_bytes)
-        # n = arduino.write(cmd_bytes)# send the command # COMMENT OUT W/O ARDUINO
+        n = arduino.write(cmd_bytes)# send the command # COMMENT OUT W/O ARDUINO
         # print(f"{n} bytes sent")
 except KeyboardInterrupt:
     print("Stopping audio stream...")

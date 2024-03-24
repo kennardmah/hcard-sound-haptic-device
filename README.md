@@ -4,7 +4,7 @@ The HCARD Sound Haptic Device project aims to innovate in the field of assistive
 
 ## About The Project
 
-![Device Concept](Brand Design/device_concept.jpg "Device Concept")
+![Device Concept](Brand Design/flyer_render.png "Device Concept")
 
 This project is a part of the "Human-centred Design of Assistive and Rehabilitation Devices" initiative. It involves creating a device capable of translating sound into haptic feedback, thereby opening new avenues for sensory experience for those with hearing challenges.
 

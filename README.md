@@ -6,7 +6,7 @@ Game5ense aims to innovate the field of assistive technology and rehabilitation 
 
 ![Device Concept](https://github.com/kennardmah/hcard-sound-haptic-device/blob/main/images/flyer_render.png?raw=true "Device Concept")
 
-This project is a part of the "Human-Centred Design of Assistive and Rehabilitation Devices" initiative. It involves developing a device capable of translating surround sound into haptic feedback, thereby opening new avenues for sensory experience for those with hearing challenges.
+This project is a part of the "Human Centred Design of Assistive and Rehabilitation Devices" initiative. It involves developing a device capable of translating surround sound into haptic feedback, thereby opening new avenues for sensory experience for those with hearing challenges.
 
 ### Features
 
@@ -27,7 +27,7 @@ Project Link: https://github.com/kennardmah/hcard-sound-haptic-device
 
 ##### This project was an interdepartment collaboration, with the following contributions:
 
-- Byron Chan (MEng Bioengineering)
+- Byron Chan (BEng Bioengineering)
 - Megan Le (MSc Human and Biological Robotics)
 - Kennard Mah (MEng Design Engineering)
 - Matthew Wong (MSc Human and Biological Robotics)

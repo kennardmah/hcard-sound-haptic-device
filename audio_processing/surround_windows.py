@@ -90,9 +90,9 @@ try:
         intensity = smooth.add_data(intensity)
         for i, value in enumerate(intensity):
             if i == 0 or i == 1 or i == 2:
-                intensity[i] = 0 if value < 2000 else 75 if value < 8000 else 100
+                intensity[i] = 0 if value < 2000 else 75 if value < 8000 else 100 # Front two audio channels
             else:
-                intensity[i] = 0 if value < 1000 else 75 if value < 2000 else 100
+                intensity[i] = 0 if value < 1000 else 75 if value < 2000 else 100 # Back two audio channels
         cmdArrayFloat = np.array(intensity, dtype=np.uint8) # Array of 2 uint8
         cmd_bytes = cmdArrayFloat.tobytes() # Array of 16 bytes
         testing.append(intensity)  # Convert np.array to list for easier handling later

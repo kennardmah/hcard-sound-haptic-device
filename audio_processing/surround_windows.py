@@ -33,34 +33,11 @@ def amplitude(samples):
     return np.max(np.abs(samples), axis=0)
 
 # ====================================================================
-#         ♬♪♫♪♬  Device Detection - Find Audio Output  ♬♪♫♪♬
+#     ♬♪♫♪♬  Stream Configuration - Define Audio Parameters  ♬♪♫♪♬
 # ====================================================================
-    
-# def find_blackhole_device_index(pyaudio_instance):
-#     for i in range(pyaudio_instance.get_device_count()):
-#         dev_info = pyaudio_instance.get_device_info_by_index(i)
-#         if dev_info['name'].startswith('BlackHole') and dev_info['maxInputChannels'] >= CHANNELS:
-#             return i
-#     return None
-
-# we can add one for JackAudio
-
-# ====================================================================
-#    ♬♪♫♪♬  Arduino Communication - Convert and Send Signals  ♬♪♫♪♬
-# ====================================================================
-
-def convert_for_arduino(smoothed_intensity):
-    # update later
-    if smoothed_intensity > 10:
-        return 1
-    return 0
 
 # INITIALIZE PYAUDIO
 p = pyaudio.PyAudio()
-
-# ====================================================================
-#     ♬♪♫♪♬  Stream Configuration - Define Audio Parameters  ♬♪♫♪♬
-# ====================================================================
 
 FORMAT = pyaudio.paInt16  # Audio format (16-bit PCM)
 CHANNELS = 6  # Number of audio channels for stereo sound
@@ -68,16 +45,9 @@ RATE = 44100  # Sample rate (samples per second)
 CHUNK = 1024  # Number of frames per buffer
 
 # SERIAL CONNECTION SET-UP
-COM_PORT = '/dev/cu.usbmodem144401'
-arduino = serial.Serial(COM_PORT, 9600) # COMMENT OUT W/O ARDUINO
-time.sleep(2) # slight delay for connection
-
-# blackhole_index = find_blackhole_device_index(p)
-
-# if blackhole_index is None:
-#     print("No device with sufficient channels not found.")
-#     p.terminate()
-#     exit()
+COM_PORT = '/dev/cu.usbmodem144401' # Change based on computer
+arduino = serial.Serial(COM_PORT, 500000) # COMMENT OUT W/O ARDUINO
+time.sleep(2) # Slight delay for connection
 
 stream = p.open(format=FORMAT,
                 channels=CHANNELS,
@@ -115,19 +85,18 @@ try:
     while True:
         data = stream.read(CHUNK, exception_on_overflow=False)
         audio_data = np.frombuffer(data, dtype=np.int16).reshape(-1, CHANNELS)
-        # defining and converting intensity into 0, 128, 256
+        # Defining and converting intensity into 0, 75, 100
         intensity = amplitude(audio_data)
         intensity = smooth.add_data(intensity)
         for i, value in enumerate(intensity):
             if i == 0 or i == 1 or i == 2:
-                intensity[i] = 0 if value < 2000 else 50 if value < 8000 else 100
+                intensity[i] = 0 if value < 2000 else 75 if value < 8000 else 100
             else:
-                intensity[i] = 0 if value < 1000 else 50 if value < 2000 else 100
-        cmdArrayFloat = np.array(intensity, dtype=np.uint8) # array of 2 uint8
-        cmd_bytes = cmdArrayFloat.tobytes() # array of 16 bytes
+                intensity[i] = 0 if value < 1000 else 75 if value < 2000 else 100
+        cmdArrayFloat = np.array(intensity, dtype=np.uint8) # Array of 2 uint8
+        cmd_bytes = cmdArrayFloat.tobytes() # Array of 16 bytes
         testing.append(intensity)  # Convert np.array to list for easier handling later
-        # print(cmd_bytes)
-        n = arduino.write(cmd_bytes) # send the command # COMMENT OUT W/O ARDUINO
+        n = arduino.write(cmd_bytes) # Send to Arduino # COMMENT OUT W/O ARDUINO
 except KeyboardInterrupt:
     print("Stopping audio stream...")
     stream.stop_stream()
